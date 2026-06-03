@@ -3,737 +3,593 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
-<title>Panini FIFA World Cup 2026 - Multi Dispositivo</title>
+<title>Panini FIFA World Cup 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  -webkit-tap-highlight-color: transparent;
-}
-
-:root {
-  --bg: #f0f2f5;
-  --header: #1a472a;
-  --card: #ffffff;
-  --green: #16a34a;
-  --green-bg: #dcfce7;
-  --green-bd: #86efac;
-  --gray-bd: #e5e7eb;
-  --gray-txt: #9ca3af;
-  --text: #1a1a1a;
-  --sub: #6b7280;
-  --radius: 12px;
-  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--bg);
   font-family: 'DM Sans', sans-serif;
-  color: var(--text);
-  min-height: 100vh;
+  background: #f5f5f5;
+  color: #1a1a1a;
 }
 
-#app-header {
+.header {
+  background: #1a472a;
+  color: white;
+  padding: 15px;
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--header);
-  padding: 12px 14px 0;
-}
-
-.header-row1 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-bottom: 10px;
-  flex-wrap: wrap;
 }
 
 .logo {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 24px;
-  letter-spacing: 1px;
-  color: #fff;
-  white-space: nowrap;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 10px;
 }
+
 .logo span { color: #f5c518; }
 
 .stats {
   display: flex;
-  gap: 6px;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 10px;
 }
+
 .stat-btn {
-  display: flex;
-  align-items: center;
-  gap: 5px;
   background: rgba(255,255,255,0.1);
   border: none;
-  cursor: pointer;
-  padding: 6px 12px;
+  padding: 8px 16px;
   border-radius: 20px;
-  transition: all 0.2s;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
 }
+
 .stat-btn.active {
   background: #f5c518;
-}
-.stat-btn.active .stat-count { color: #1a472a; }
-.stat-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-.stat-dot.green { background: #4ade80; }
-.stat-dot.gray { background: #9ca3af; }
-.stat-count {
-  font-size: 14px;
-  font-weight: 700;
-  color: #fff;
-}
-
-.search-wrap {
-  flex: 1;
-  min-width: 150px;
-  position: relative;
-}
-.search-wrap input {
-  width: 100%;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 24px;
-  padding: 8px 12px 8px 34px;
-  color: #fff;
-  font-size: 13px;
-  outline: none;
-}
-.search-wrap input::placeholder { color: rgba(255,255,255,0.5); }
-.search-wrap svg {
-  position: absolute;
-  left: 11px;
-  top: 50%;
-  transform: translateY(-50%);
-  opacity: 0.6;
-}
-
-.sync-status {
-  background: rgba(255,255,255,0.1);
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  padding: 6px 12px;
-  font-size: 11px;
-  cursor: pointer;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.sync-status.syncing { background: #f5c518; color: #1a472a; }
-.sync-status:hover { background: rgba(255,255,255,0.2); }
-
-#progress-bar-wrap {
-  background: var(--header);
-  padding: 0 14px 12px;
-}
-.prog-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.prog-track {
-  flex: 1;
-  height: 6px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 3px;
-  overflow: hidden;
-}
-.prog-fill {
-  height: 100%;
-  background: #4ade80;
-  border-radius: 3px;
-  transition: width 0.3s ease;
-  width: 0%;
-}
-.prog-pct {
-  font-size: 12px;
-  font-weight: 600;
-  color: #4ade80;
-  min-width: 45px;
-}
-
-#group-nav {
-  background: var(--header);
-  overflow-x: auto;
-  scrollbar-width: thin;
-  padding-bottom: 8px;
-}
-#group-nav::-webkit-scrollbar { height: 3px; }
-#group-nav::-webkit-scrollbar-thumb { background: #f5c518; border-radius: 3px; }
-.nav-inner {
-  display: flex;
-  gap: 6px;
-  padding: 0 14px;
-  width: max-content;
-}
-.nav-btn {
-  background: rgba(255,255,255,0.08);
-  border: none;
-  color: rgba(255,255,255,0.7);
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s;
-}
-.nav-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
-.nav-btn.active {
-  background: #f5c518;
   color: #1a472a;
-  font-weight: 700;
 }
 
-#content {
-  padding: 16px 12px 80px;
-}
-
-.group-section {
-  margin-bottom: 16px;
-}
-.group-title {
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--sub);
-  padding: 8px 4px 10px;
-  border-bottom: 2px solid #e2e8f0;
-  margin-bottom: 8px;
-}
-
-.team-card {
-  background: var(--card);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  margin-bottom: 12px;
+.progress-bar {
+  background: rgba(255,255,255,0.2);
+  height: 6px;
+  border-radius: 3px;
   overflow: hidden;
+  margin: 10px 0;
 }
-.team-header {
-  padding: 12px 14px 8px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-.team-name {
-  font-size: 15px;
-  font-weight: 700;
-}
-.team-prog-text {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--green);
-  background: #dcfce7;
-  padding: 2px 8px;
-  border-radius: 20px;
-}
-.team-prog-track {
-  height: 4px;
-  background: #e2e8f0;
-  overflow: hidden;
-}
-.team-prog-fill {
+
+.progress-fill {
+  background: #4ade80;
   height: 100%;
-  background: var(--green);
+  width: 0%;
   transition: width 0.3s;
 }
 
-.stickers-grid {
+.search-box {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.nav {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+.nav-btn {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  padding: 6px 16px;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.nav-btn.active {
+  background: #f5c518;
+  color: #1a472a;
+  font-weight: bold;
+}
+
+.content {
+  padding: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.group {
+  margin-bottom: 24px;
+}
+
+.group-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #666;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.team-card {
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.team-header {
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fafafa;
+}
+
+.team-name {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.team-progress {
+  font-size: 12px;
+  color: #16a34a;
+  font-weight: bold;
+}
+
+.team-bar {
+  height: 3px;
+  background: #e5e5e5;
+}
+
+.team-bar-fill {
+  height: 100%;
+  background: #16a34a;
+  width: 0%;
+  transition: width 0.3s;
+}
+
+.stickers {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
   padding: 12px;
 }
+
 .sticker {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  border: 2px solid var(--gray-bd);
   background: #fafafa;
-  color: #64748b;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
   transition: all 0.1s;
-  user-select: none;
 }
-.sticker:active { transform: scale(0.94); }
+
+.sticker:active {
+  transform: scale(0.95);
+}
+
 .sticker.pegada {
-  background: var(--green-bg);
-  border-color: var(--green);
-  color: var(--green);
+  background: #dcfce7;
+  border-color: #16a34a;
+  color: #16a34a;
   position: relative;
 }
+
 .sticker.pegada::after {
   content: "✓";
   position: absolute;
-  top: 1px;
+  top: 2px;
   right: 4px;
   font-size: 10px;
-  font-weight: 700;
 }
 
-.empty-state {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--sub);
-}
-.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
-
-#toast {
+.toast {
   position: fixed;
-  bottom: 30px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%) translateY(100px);
   background: #1a1a1a;
-  color: #fff;
+  color: white;
   padding: 10px 20px;
   border-radius: 30px;
   font-size: 13px;
-  font-weight: 500;
+  transition: transform 0.3s;
   z-index: 1000;
-  transition: all 0.25s;
-  pointer-events: none;
-  white-space: nowrap;
 }
-#toast.show {
+
+.toast.show {
   transform: translateX(-50%) translateY(0);
 }
-#toast.ok { background: #16a34a; }
-#toast.error { background: #dc2626; }
 
-.offline-badge {
-  background: #dc2626;
-  color: white;
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 10px;
-  margin-left: 8px;
+.toast.ok { background: #16a34a; }
+.toast.error { background: #dc2626; }
+
+.sync-btn {
+  background: #f5c518;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 10px;
 }
 </style>
 </head>
 <body>
 
-<div id="app-header">
-  <div class="header-row1">
-    <div class="logo">PANINI <span>2026</span></div>
-    <div class="stats">
-      <button class="stat-btn" id="filter-pegadas">
-        <span class="stat-dot green"></span>
-        <span class="stat-count" id="cnt-pegadas">0</span>
-      </button>
-      <button class="stat-btn" id="filter-faltantes">
-        <span class="stat-dot gray"></span>
-        <span class="stat-count" id="cnt-faltantes">0</span>
-      </button>
-    </div>
-    <div class="search-wrap">
-      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="white">
-        <circle cx="11" cy="11" r="8" stroke-width="2"/>
-        <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      <input id="search-input" type="search" placeholder="Buscar país o número..." autocomplete="off"/>
-    </div>
-    <button class="sync-status" id="sync-btn">
-      🔄 Sync
+<div class="header">
+  <div class="logo">PANINI <span>2026</span></div>
+  
+  <div class="stats">
+    <button class="stat-btn" id="filterPegadas">
+      <span>✅</span> <span id="pegadasCount">0</span>
     </button>
+    <button class="stat-btn" id="filterFaltantes">
+      <span>⬜</span> <span id="faltantesCount">0</span>
+    </button>
+    <button class="sync-btn" id="syncBtn">🔄 Sync</button>
   </div>
-  <div id="progress-bar-wrap">
-    <div class="prog-row">
-      <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
-      <span class="prog-pct" id="prog-pct">0%</span>
-    </div>
+  
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
   </div>
-  <div id="group-nav"><div class="nav-inner" id="nav-inner"></div></div>
+  
+  <input type="text" class="search-box" id="searchInput" placeholder="🔍 Buscar país o número...">
+  
+  <div class="nav" id="nav"></div>
 </div>
 
-<div id="content"></div>
-<div id="toast"></div>
+<div class="content" id="content"></div>
+<div class="toast" id="toast"></div>
 
 <script>
-// ==================== CONFIGURACIÓN ====================
-// ⚠️ REEMPLAZA ESTA URL CON LA DE TU APPS SCRIPT ⚠️
-const API_URL = "https://script.google.com/macros/s/AKfycbxBKSr1BxqAIszC-M-nXbU252BmoLeGL8JnRPVKHC2SR7Xp5uIQf4-3nILlIrElO4I2gQ/exec";
+// ✅ TU NUEVA URL DE APPS SCRIPT (actualizada)
+const API_URL = "https://script.google.com/macros/s/AKfycbxNlkoQV16dMKTQzodTVuZ1JSmbre45KdYi58-PSa1SdyWxCgw6yC4gSxla8Vj5-CG2Jw/exec";
 
 // ==================== DATOS DEL ÁLBUM ====================
-const ALBUM_DATA = [
-  { grupo: "Intro FWC", equipos: [
+const ALBUM = {
+  "Intro FWC": [
     { id: "fwc", nombre: "FWC Highlights", fichas: [0,1,2,3,4,5,6,7,8] },
     { id: "hist", nombre: "History", fichas: [9,10,11,12,13,14,15,16,17,18,19] }
-  ]},
-  { grupo: "Grupo A", equipos: [
-    { id: "mex", nombre: "México", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "rsa", nombre: "Sudáfrica", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "kor", nombre: "Corea del Sur", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "cze", nombre: "República Checa", fichas: Array.from({length:20}, (_,i) => i+1) }
-  ]},
-  { grupo: "Grupo B", equipos: [
-    { id: "can", nombre: "Canadá", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "bih", nombre: "Bosnia", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "qat", nombre: "Catar", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "sui", nombre: "Suiza", fichas: Array.from({length:20}, (_,i) => i+1) }
-  ]},
-  { grupo: "Grupo C", equipos: [
-    { id: "bra", nombre: "Brasil", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "mar", nombre: "Marruecos", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "hai", nombre: "Haití", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "sco", nombre: "Escocia", fichas: Array.from({length:20}, (_,i) => i+1) }
-  ]},
-  { grupo: "Grupo D", equipos: [
-    { id: "usa", nombre: "Estados Unidos", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "par", nombre: "Paraguay", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "aus", nombre: "Australia", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "tur", nombre: "Turquía", fichas: Array.from({length:20}, (_,i) => i+1) }
-  ]},
-  { grupo: "Grupo E", equipos: [
-    { id: "ger", nombre: "Alemania", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "cuw", nombre: "Curazao", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "civ", nombre: "Costa de Marfil", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "ecu", nombre: "Ecuador", fichas: Array.from({length:20}, (_,i) => i+1) }
-  ]},
-  { grupo: "Grupo F", equipos: [
-    { id: "ned", nombre: "Países Bajos", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "jpn", nombre: "Japón", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "swe", nombre: "Suecia", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "tun", nombre: "Túnez", fichas: Array.from({length:20}, (_,i) => i+1) }
-  ]},
-  { grupo: "Grupo G", equipos: [
-    { id: "bel", nombre: "Bélgica", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "egy", nombre: "Egipto", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "irn", nombre: "Irán", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "nzl", nombre: "Nueva Zelanda", fichas: Array.from({length:20}, (_,i) => i+1) }
-  ]},
-  { grupo: "Grupo H", equipos: [
-    { id: "esp", nombre: "España", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "cpv", nombre: "Cabo Verde", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "ksa", nombre: "Arabia Saudita", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "uru", nombre: "Uruguay", fichas: Array.from({length:20}, (_,i) => i+1) }
-  ]},
-  { grupo: "Grupo I", equipos: [
-    { id: "fra", nombre: "Francia", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "sen", nombre: "Senegal", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "irq", nombre: "Irak", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "nor", nombre: "Noruega", fichas: Array.from({length:20}, (_,i) => i+1) }
-  ]},
-  { grupo: "Grupo J", equipos: [
-    { id: "arg", nombre: "Argentina", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "alg", nombre: "Argelia", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "aut", nombre: "Austria", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "jor", nombre: "Jordania", fichas: Array.from({length:20}, (_,i) => i+1) }
-  ]},
-  { grupo: "Grupo K", equipos: [
-    { id: "por", nombre: "Portugal", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "cod", nombre: "Congo DR", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "uzb", nombre: "Uzbekistán", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "col", nombre: "Colombia", fichas: Array.from({length:20}, (_,i) => i+1) }
-  ]},
-  { grupo: "Grupo L", equipos: [
-    { id: "eng", nombre: "Inglaterra", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "cro", nombre: "Croacia", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "gha", nombre: "Ghana", fichas: Array.from({length:20}, (_,i) => i+1) },
-    { id: "pan", nombre: "Panamá", fichas: Array.from({length:20}, (_,i) => i+1) }
-  ]},
-  { grupo: "Especial", equipos: [
-    { id: "cc", nombre: "Coca-Cola", fichas: Array.from({length:14}, (_,i) => i+1) }
-  ]}
-];
+  ],
+  "Grupo A": [
+    { id: "mex", nombre: "México", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "rsa", nombre: "Sudáfrica", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "kor", nombre: "Corea del Sur", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "cze", nombre: "República Checa", fichas: [...Array(20).keys()].map(i => i+1) }
+  ],
+  "Grupo B": [
+    { id: "can", nombre: "Canadá", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "bih", nombre: "Bosnia", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "qat", nombre: "Catar", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "sui", nombre: "Suiza", fichas: [...Array(20).keys()].map(i => i+1) }
+  ],
+  "Grupo C": [
+    { id: "bra", nombre: "Brasil", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "mar", nombre: "Marruecos", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "hai", nombre: "Haití", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "sco", nombre: "Escocia", fichas: [...Array(20).keys()].map(i => i+1) }
+  ],
+  "Grupo D": [
+    { id: "usa", nombre: "EE.UU.", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "par", nombre: "Paraguay", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "aus", nombre: "Australia", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "tur", nombre: "Turquía", fichas: [...Array(20).keys()].map(i => i+1) }
+  ],
+  "Grupo E": [
+    { id: "ger", nombre: "Alemania", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "cuw", nombre: "Curazao", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "civ", nombre: "Costa de Marfil", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "ecu", nombre: "Ecuador", fichas: [...Array(20).keys()].map(i => i+1) }
+  ],
+  "Grupo F": [
+    { id: "ned", nombre: "Países Bajos", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "jpn", nombre: "Japón", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "swe", nombre: "Suecia", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "tun", nombre: "Túnez", fichas: [...Array(20).keys()].map(i => i+1) }
+  ],
+  "Grupo G": [
+    { id: "bel", nombre: "Bélgica", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "egy", nombre: "Egipto", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "irn", nombre: "Irán", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "nzl", nombre: "Nueva Zelanda", fichas: [...Array(20).keys()].map(i => i+1) }
+  ],
+  "Grupo H": [
+    { id: "esp", nombre: "España", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "cpv", nombre: "Cabo Verde", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "ksa", nombre: "Arabia Saudita", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "uru", nombre: "Uruguay", fichas: [...Array(20).keys()].map(i => i+1) }
+  ],
+  "Grupo I": [
+    { id: "fra", nombre: "Francia", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "sen", nombre: "Senegal", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "irq", nombre: "Irak", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "nor", nombre: "Noruega", fichas: [...Array(20).keys()].map(i => i+1) }
+  ],
+  "Grupo J": [
+    { id: "arg", nombre: "Argentina", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "alg", nombre: "Argelia", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "aut", nombre: "Austria", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "jor", nombre: "Jordania", fichas: [...Array(20).keys()].map(i => i+1) }
+  ],
+  "Grupo K": [
+    { id: "por", nombre: "Portugal", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "cod", nombre: "Congo DR", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "uzb", nombre: "Uzbekistán", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "col", nombre: "Colombia", fichas: [...Array(20).keys()].map(i => i+1) }
+  ],
+  "Grupo L": [
+    { id: "eng", nombre: "Inglaterra", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "cro", nombre: "Croacia", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "gha", nombre: "Ghana", fichas: [...Array(20).keys()].map(i => i+1) },
+    { id: "pan", nombre: "Panamá", fichas: [...Array(20).keys()].map(i => i+1) }
+  ],
+  "Especial": [
+    { id: "cc", nombre: "Coca-Cola", fichas: [...Array(14).keys()].map(i => i+1) }
+  ]
+};
 
-// ==================== ESTADO GLOBAL ====================
-let pegadas = new Map(); // key -> { estado, pendiente }
+// ==================== ESTADO ====================
+let pegadas = new Set();
 let activeGroup = "Todos";
 let filterMode = null;
 let searchText = "";
-let syncInterval = null;
-let isOnline = true;
 
-// ==================== PERSISTENCIA LOCAL ====================
-function saveToLocalStorage() {
-  const toSave = {};
-  for (let [key, val] of pegadas) {
-    if (val.estado === "p") toSave[key] = "p";
-  }
-  localStorage.setItem("panini2026_pegadas", JSON.stringify(toSave));
-}
-
-function loadFromLocalStorage() {
-  const saved = localStorage.getItem("panini2026_pegadas");
-  if (saved) {
-    const obj = JSON.parse(saved);
-    for (let [key, estado] of Object.entries(obj)) {
-      pegadas.set(key, { estado: estado, pendiente: false });
-    }
-  }
-}
-
-// ==================== API CALLS ====================
-async function apiCall(action, data = {}) {
-  try {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ action, ...data })
-    });
-    
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.error("API Error:", error);
-    isOnline = false;
-    return { error: error.message, offline: true };
-  }
+// ==================== FUNCIONES ====================
+function makeKey(teamId, num) {
+  return `${teamId}|${num}`;
 }
 
 async function loadFromServer() {
   try {
-    const result = await apiCall("getAllState");
-    if (result.ok && !result.offline) {
-      // Limpiar estado actual
-      pegadas.clear();
-      // Cargar desde servidor
-      for (let [key, estado] of Object.entries(result.state)) {
-        pegadas.set(key, { estado: estado, pendiente: false });
-      }
-      saveToLocalStorage();
-      isOnline = true;
-      render();
-      showToast("Sincronizado con el servidor", "ok");
-      return true;
-    } else if (result.offline) {
-      throw new Error("Offline");
-    }
-    return false;
-  } catch (error) {
-    console.error("Error loading from server:", error);
-    isOnline = false;
-    showToast("⚠️ Sin conexión - usando datos locales", "error");
-    return false;
-  }
-}
-
-async function syncToServer(key, estado) {
-  if (estado === "p") {
-    await apiCall("setState", { key, estado });
-  } else {
-    await apiCall("deleteState", { key });
-  }
-}
-
-async function syncPending() {
-  const pending = [];
-  for (let [key, data] of pegadas) {
-    if (data.pendiente) {
-      pending.push({ key, estado: data.estado });
-    }
-  }
-  
-  if (pending.length === 0) return;
-  
-  for (let item of pending) {
-    await syncToServer(item.key, item.estado);
-    const current = pegadas.get(item.key);
-    if (current) {
-      current.pendiente = false;
-      pegadas.set(item.key, current);
-    }
-  }
-  
-  saveToLocalStorage();
-  render();
-}
-
-// ==================== TOGGLE STICKER ====================
-function makeKey(teamId, numero) {
-  return `${teamId}|${numero}`;
-}
-
-async function toggleSticker(teamId, numero) {
-  const key = makeKey(teamId, numero);
-  const current = pegadas.get(key);
-  const newEstado = !current || current.estado !== "p";
-  
-  if (newEstado) {
-    pegadas.set(key, { estado: "p", pendiente: true });
-  } else {
-    pegadas.delete(key);
-  }
-  
-  saveToLocalStorage();
-  render();
-  showToast(newEstado ? "✓ Pegada" : "✗ Desmarcada");
-  
-  // Enviar al servidor inmediatamente si hay conexión
-  if (isOnline) {
-    try {
-      if (newEstado) {
-        await apiCall("setState", { key, estado: "p" });
-      } else {
-        await apiCall("deleteState", { key });
-      }
-      const currentData = pegadas.get(key);
-      if (currentData) {
-        currentData.pendiente = false;
-        pegadas.set(key, currentData);
-      } else if (!newEstado) {
-        // Ya se eliminó, está bien
-      }
-      saveToLocalStorage();
-    } catch (error) {
-      console.error("Sync error:", error);
-      showToast("⚠️ Sin conexión - se guardará después", "error");
-      isOnline = false;
-    }
-  } else {
-    // Intentar reconectar después
-    setTimeout(() => attemptReconnect(), 5000);
-  }
-}
-
-async function attemptReconnect() {
-  const result = await loadFromServer();
-  if (result) {
-    await syncPending();
-    isOnline = true;
-    render();
-    showToast("✅ Reconectado y sincronizado", "ok");
-  }
-}
-
-// ==================== RENDERIZADO ====================
-function render() {
-  // Calcular estadísticas
-  let totalFichas = 0;
-  let totalPegadas = 0;
-  
-  ALBUM_DATA.forEach(grupo => {
-    grupo.equipos.forEach(equipo => {
-      equipo.fichas.forEach(num => {
-        totalFichas++;
-        const key = makeKey(equipo.id, num);
-        const data = pegadas.get(key);
-        if (data && data.estado === "p") totalPegadas++;
-      });
+    showToast("Cargando...");
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "getAllState" })
     });
-  });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      pegadas.clear();
+      for (let [key, value] of Object.entries(data.state)) {
+        if (value === "p") pegadas.add(key);
+      }
+      saveToLocal();
+      render();
+      showToast("✅ Sincronizado", "ok");
+    } else {
+      throw new Error(data.error || "Error desconocido");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    loadFromLocal();
+    showToast("⚠️ Usando datos locales", "error");
+  }
+}
+
+async function saveToServer(key, isPegada) {
+  try {
+    const action = isPegada ? "setState" : "deleteState";
+    const body = isPegada 
+      ? { action, key, estado: "p" }
+      : { action, key };
+    
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    
+    const data = await response.json();
+    return data.success;
+  } catch (error) {
+    console.error("Error saving:", error);
+    return false;
+  }
+}
+
+function saveToLocal() {
+  localStorage.setItem("panini2026", JSON.stringify([...pegadas]));
+}
+
+function loadFromLocal() {
+  const saved = localStorage.getItem("panini2026");
+  if (saved) {
+    pegadas = new Set(JSON.parse(saved));
+    render();
+  }
+}
+
+async function toggleSticker(teamId, num) {
+  const key = makeKey(teamId, num);
   
-  const porcentaje = totalFichas ? Math.round((totalPegadas / totalFichas) * 100) : 0;
-  document.getElementById("cnt-pegadas").textContent = totalPegadas;
-  document.getElementById("cnt-faltantes").textContent = totalFichas - totalPegadas;
-  document.getElementById("prog-fill").style.width = `${porcentaje}%`;
-  document.getElementById("prog-pct").textContent = `${porcentaje}%`;
+  if (pegadas.has(key)) {
+    pegadas.delete(key);
+    await saveToServer(key, false);
+    showToast("❌ Desmarcada");
+  } else {
+    pegadas.add(key);
+    await saveToServer(key, true);
+    showToast("✅ Pegada!", "ok");
+  }
+  
+  saveToLocal();
+  render();
+}
+
+function render() {
+  // Calcular totales
+  let total = 0;
+  let pegadasTotal = 0;
+  
+  for (let grupo in ALBUM) {
+    for (let equipo of ALBUM[grupo]) {
+      total += equipo.fichas.length;
+      for (let num of equipo.fichas) {
+        if (pegadas.has(makeKey(equipo.id, num))) pegadasTotal++;
+      }
+    }
+  }
+  
+  document.getElementById("pegadasCount").textContent = pegadasTotal;
+  document.getElementById("faltantesCount").textContent = total - pegadasTotal;
+  document.getElementById("progressFill").style.width = `${(pegadasTotal/total)*100}%`;
   
   // Filtrar grupos
-  const gruposMostrar = activeGroup === "Todos" 
-    ? ALBUM_DATA 
-    : ALBUM_DATA.filter(g => g.grupo === activeGroup);
-  
   let html = "";
+  let grupos = activeGroup === "Todos" ? Object.keys(ALBUM) : [activeGroup];
   
-  gruposMostrar.forEach(grupo => {
-    let grupoHtml = "";
+  for (let grupo of grupos) {
+    let groupHtml = "";
     
-    grupo.equipos.forEach(equipo => {
+    for (let equipo of ALBUM[grupo]) {
       // Filtrar por búsqueda
-      const matchesSearch = !searchText || 
+      let matchesSearch = !searchText || 
         equipo.nombre.toLowerCase().includes(searchText) ||
-        equipo.id.toLowerCase().includes(searchText) ||
-        equipo.fichas.some(n => n.toString().includes(searchText));
+        equipo.id.toLowerCase().includes(searchText);
       
-      if (!matchesSearch) return;
+      if (!matchesSearch) continue;
       
-      // Filtrar fichas por modo
+      // Filtrar stickers
       let fichasMostrar = [...equipo.fichas];
       if (filterMode === "pegadas") {
-        fichasMostrar = fichasMostrar.filter(n => {
-          const data = pegadas.get(makeKey(equipo.id, n));
-          return data && data.estado === "p";
-        });
+        fichasMostrar = fichasMostrar.filter(n => pegadas.has(makeKey(equipo.id, n)));
       } else if (filterMode === "faltantes") {
-        fichasMostrar = fichasMostrar.filter(n => {
-          const data = pegadas.get(makeKey(equipo.id, n));
-          return !data || data.estado !== "p";
-        });
+        fichasMostrar = fichasMostrar.filter(n => !pegadas.has(makeKey(equipo.id, n)));
       }
       
-      if (fichasMostrar.length === 0 && filterMode) return;
+      if (fichasMostrar.length === 0 && filterMode) continue;
       
-      const pegadasEquipo = equipo.fichas.filter(n => {
-        const data = pegadas.get(makeKey(equipo.id, n));
-        return data && data.estado === "p";
-      }).length;
+      const pegadasEquipo = equipo.fichas.filter(n => pegadas.has(makeKey(equipo.id, n))).length;
       const totalEquipo = equipo.fichas.length;
-      const pctEquipo = totalEquipo ? Math.round((pegadasEquipo / totalEquipo) * 100) : 0;
       
       let stickersHtml = "";
-      fichasMostrar.forEach(num => {
-        const data = pegadas.get(makeKey(equipo.id, num));
-        const isPegada = data && data.estado === "p";
-        const isPending = data && data.pendiente;
+      for (let num of fichasMostrar) {
+        const isPegada = pegadas.has(makeKey(equipo.id, num));
         stickersHtml += `<div class="sticker ${isPegada ? 'pegada' : ''}" 
-                          style="${isPending ? 'opacity:0.7' : ''}"
-                          onclick="toggleSticker('${equipo.id}', ${num})">
-                          ${num}
-                         </div>`;
-      });
+                              onclick="toggleSticker('${equipo.id}', ${num})">
+                              ${num}
+                            </div>`;
+      }
       
-      grupoHtml += `
+      groupHtml += `
         <div class="team-card">
           <div class="team-header">
             <span class="team-name">${equipo.nombre}</span>
-            <span class="team-prog-text">${pegadasEquipo}/${totalEquipo}</span>
+            <span class="team-progress">${pegadasEquipo}/${totalEquipo}</span>
           </div>
-          <div class="team-prog-track">
-            <div class="team-prog-fill" style="width: ${pctEquipo}%"></div>
+          <div class="team-bar">
+            <div class="team-bar-fill" style="width: ${(pegadasEquipo/totalEquipo)*100}%"></div>
           </div>
-          <div class="stickers-grid">
+          <div class="stickers">
             ${stickersHtml}
           </div>
         </div>
       `;
-    });
+    }
     
-    if (grupoHtml) {
-      html += `<div class="group-section">
-        <div class="group-title">${grupo.grupo}</div>
-        ${grupoHtml}
+    if (groupHtml) {
+      html += `<div class="group">
+        <div class="group-title">${grupo}</div>
+        ${groupHtml}
       </div>`;
     }
-  });
+  }
   
   if (!html) {
-    html = `<div class="empty-state">
-      <div class="icon">📭</div>
-      <p>No hay resultados para "${searchText || (filterMode === 'pegadas' ? 'pegadas' : 'faltantes')}"</p>
-    </div>`;
+    html = `<div style="text-align:center;padding:40px">😕 No hay resultados</div>`;
   }
   
   document.getElementById("content").innerHTML = html;
-  
-  // Actualizar badge de conexión
-  const syncBtn = document.getElementById("sync-btn");
-  if (!isOnline) {
-    syncBtn.innerHTML = "⚠️ Offline";
-    syncBtn.classList.add("syncing");
-  } else {
-    syncBtn.innerHTML = "🔄 Sync";
-    syncBtn.classList.remove("syncing");
-  }
 }
+
+function showToast(msg, type = "") {
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.className = "toast show" + (type ? " " + type : "");
+  setTimeout(() => {
+    toast.className = "toast";
+  }, 2000);
+}
+
+// ==================== INICIALIZACIÓN ====================
+function buildNav() {
+  const nav = document.getElementById("nav");
+  const grupos = ["Todos", ...Object.keys(ALBUM)];
+  
+  grupos.forEach(grupo => {
+    const btn = document.createElement("button");
+    btn.className = "nav-btn" + (grupo === "Todos" ? " active" : "");
+    btn.textContent = grupo;
+    btn.onclick = () => {
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeGroup = grupo;
+      render();
+    };
+    nav.appendChild(btn);
+  });
+}
+
+document.getElementById("filterPegadas").onclick = () => {
+  filterMode = filterMode === "pegadas" ? null : "pegadas";
+  document.getElementById("filterPegadas").classList.toggle("active", filterMode === "pegadas");
+  document.getElementById("filterFaltantes").classList.toggle("active", filterMode === "faltantes");
+  render();
+};
+
+document.getElementById("filterFaltantes").onclick = () => {
+  filterMode = filterMode === "faltantes" ? null : "faltantes";
+  document.getElementById("filterPegadas").classList.toggle("active", filterMode === "pegadas");
+  document.getElementById("filterFaltantes").classList.toggle("active", filterMode === "faltantes");
+  render();
+};
+
+document.getElementById("searchInput").oninput = (e) => {
+  searchText = e.target.value.toLowerCase();
+  render();
+};
+
+document.getElementById("syncBtn").onclick = () => {
+  loadFromServer();
+};
+
+// Iniciar
+buildNav();
+loadFromLocal();
+loadFromServer();
+
+// Auto-sync cada 30 segundos
+setInterval(() => {
+  loadFromServer();
+}, 30000);
+</script>
+</body>
+</html>
