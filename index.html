@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Panini FIFA World Cup 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:        #f8f5f0;
+  --header:    #1a1a1a;
+  --card:      #ffffff;
+  --green:     #16a34a;
+  --green-bg:  #dcfce7;
+  --green-bd:  #86efac;
+  --gray-bd:   #e5e7eb;
+  --gray-txt:  #9ca3af;
+  --text:      #1a1a1a;
+  --sub:       #6b7280;
+  --radius:    12px;
+  --shadow:    0 1px 6px rgba(0,0,0,.07);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);min-height:100vh;}
+
+/* ── HEADER ─────────────────────────────── */
+#app-header{
+  position:sticky;top:0;z-index:100;
+  background:var(--header);
+  padding:10px 14px 0;
+}
+.header-row1{
+  display:flex;align-items:center;gap:10px;
+  padding-bottom:10px;
+}
+.logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;letter-spacing:1px;color:#fff;
+  white-space:nowrap;flex-shrink:0;
+}
+.logo span{color:#f59e0b;}
+
+.stats{display:flex;gap:6px;flex-shrink:0;}
+.stat-btn{
+  display:flex;align-items:center;gap:5px;
+  background:transparent;border:none;cursor:pointer;
+  padding:5px 9px;border-radius:8px;transition:background .15s;
+}
+.stat-btn:hover,.stat-btn.active{background:rgba(255,255,255,.12);}
+.stat-dot{width:8px;height:8px;border-radius:50%;}
+.stat-dot.green{background:#4ade80;}
+.stat-dot.gray {background:#6b7280;}
+.stat-count{font-size:14px;font-weight:600;color:#fff;}
+.stat-label{font-size:11px;color:#9ca3af;display:none;}
+
+.search-wrap{
+  flex:1;position:relative;
+}
+.search-wrap input{
+  width:100%;background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:20px;padding:7px 12px 7px 34px;
+  color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;
+  outline:none;
+}
+.search-wrap input::placeholder{color:rgba(255,255,255,.4);}
+.search-wrap svg{
+  position:absolute;left:11px;top:50%;transform:translateY(-50%);
+  opacity:.45;pointer-events:none;
+}
+
+.btn-sync{
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
+  border-radius:8px;color:#fff;padding:6px 11px;
+  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;
+  cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s;
+}
+.btn-sync:hover{background:rgba(255,255,255,.2);}
+
+/* ── PROGRESS BAR ───────────────────────── */
+#progress-bar-wrap{
+  background:var(--header);padding:0 14px 10px;
+}
+.prog-row{display:flex;align-items:center;gap:8px;}
+.prog-track{
+  flex:1;height:5px;background:rgba(255,255,255,.12);
+  border-radius:3px;overflow:hidden;
+}
+.prog-fill{
+  height:100%;background:#4ade80;border-radius:3px;
+  transition:width .4s ease;width:0%;
+}
+.prog-pct{font-size:11px;color:#9ca3af;white-space:nowrap;min-width:36px;text-align:right;}
+
+/* ── GROUP NAV ──────────────────────────── */
+#group-nav{
+  background:var(--header);
+  padding:0 0 0 0;
+  overflow-x:auto;scrollbar-width:none;
+}
+#group-nav::-webkit-scrollbar{display:none;}
+.nav-inner{
+  display:flex;gap:2px;padding:0 10px 10px;width:max-content;
+}
+.nav-btn{
+  background:rgba(255,255,255,.07);border:none;
+  color:rgba(255,255,255,.6);
+  padding:5px 12px;border-radius:16px;
+  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;
+  cursor:pointer;white-space:nowrap;transition:all .15s;
+}
+.nav-btn:hover{background:rgba(255,255,255,.14);color:#fff;}
+.nav-btn.active{background:#f59e0b;color:#1a1a1a;font-weight:700;}
+
+/* ── CONTENT ─────────────────────────────── */
+#content{padding:12px 12px 40px;}
+
+.group-section{margin-bottom:8px;}
+.group-title{
+  font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.8px;color:var(--sub);
+  padding:14px 4px 6px;
+}
+
+.team-card{
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow);margin-bottom:10px;
+  border:1px solid rgba(0,0,0,.05);
+  overflow:hidden;
+}
+.team-header{
+  padding:10px 14px 8px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;
+}
+.team-name{font-size:14px;font-weight:600;}
+.team-prog-text{font-size:12px;color:var(--sub);white-space:nowrap;}
+.team-prog-track{
+  height:3px;background:#f3f4f6;overflow:hidden;
+}
+.team-prog-fill{
+  height:100%;background:var(--green);transition:width .3s;
+}
+
+.stickers-grid{
+  display:flex;flex-wrap:wrap;gap:5px;
+  padding:10px 12px 12px;
+}
+.sticker{
+  width:36px;height:36px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:600;cursor:pointer;
+  border:1.5px solid var(--gray-bd);
+  background:#f9fafb;color:var(--gray-txt);
+  transition:transform .1s,box-shadow .1s;
+  user-select:none;position:relative;
+}
+.sticker:active{transform:scale(.92);}
+.sticker.pegada{
+  background:var(--green-bg);
+  border-color:var(--green-bd);
+  color:var(--green);
+}
+.sticker.pegada::after{
+  content:"✔";position:absolute;top:1px;right:3px;
+  font-size:8px;color:var(--green);font-weight:700;
+}
+
+/* ── EMPTY STATE ───────────────────────── */
+.empty-state{
+  text-align:center;padding:60px 20px;color:var(--sub);
+}
+.empty-state .icon{font-size:40px;margin-bottom:12px;}
+.empty-state p{font-size:14px;}
+
+/* ── TOAST ──────────────────────────────── */
+#toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:20px;
+  font-size:13px;font-weight:500;z-index:999;
+  opacity:0;transition:all .25s ease;pointer-events:none;white-space:nowrap;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#toast.ok   {background:#16a34a;}
+#toast.err  {background:#dc2626;}
+
+/* ── SCROLLBAR ──────────────────────────── */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:2px;}
+</style>
+</head>
+<body>
+
+<div id="app-header">
+  <div class="header-row1">
+    <div class="logo">PANINI <span>2026</span></div>
+
+    <div class="stats">
+      <button class="stat-btn" id="btn-filter-p" onclick="toggleFilter('p')">
+        <span class="stat-dot green"></span>
+        <span class="stat-count" id="cnt-p">0</span>
+      </button>
+      <button class="stat-btn" id="btn-filter-f" onclick="toggleFilter('f')">
+        <span class="stat-dot gray"></span>
+        <span class="stat-count" id="cnt-f">0</span>
+      </button>
+    </div>
+
+    <div class="search-wrap">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="white">
+        <circle cx="11" cy="11" r="8" stroke-width="2"/>
+        <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <input id="search-input" type="search" placeholder="País o número…"
+             oninput="onSearch()" autocomplete="off"/>
+    </div>
+
+    <button class="btn-sync" onclick="syncNow()">⟳ Sync</button>
+  </div>
+  <div id="progress-bar-wrap">
+    <div class="prog-row">
+      <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+      <span class="prog-pct" id="prog-pct">0%</span>
+    </div>
+  </div>
+  <div id="group-nav"><div class="nav-inner" id="nav-inner"></div></div>
+</div>
+
+<div id="content"></div>
+<div id="toast"></div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────
+const API_URL = "https://script.google.com/macros/s/AKfycbyjhhhdHfwnCOdmwJnPpnUBm6i4IHICeYa5dETAhI_GOZYSnCi46Hj78I0gERHIqSR_3g/exec";
+
+// ── ÁLBUM DATA ────────────────────────────────────────────
+const ALBUM = [
+  { grupo:"Intro FWC", equipos:[
+    { id:"FWC",     nombre:"FWC Highlights", fichas:Array.from({length:9},(_,i)=>i) },
+    { id:"HIST",    nombre:"History",        fichas:Array.from({length:11},(_,i)=>i+9) }
+  ]},
+  { grupo:"Grupo A", equipos:[
+    { id:"MEX", nombre:"MEX (México)",     fichas:range(1,20) },
+    { id:"RSA", nombre:"RSA (Sudáfrica)",  fichas:range(1,20) },
+    { id:"KOR", nombre:"KOR (Corea)",      fichas:range(1,20) },
+    { id:"CZE", nombre:"CZE (Chequia)",    fichas:range(1,20) },
+  ]},
+  { grupo:"Grupo B", equipos:[
+    { id:"CAN", nombre:"CAN (Canadá)",      fichas:range(1,20) },
+    { id:"BIH", nombre:"BIH (Bosnia-Herz.)",fichas:range(1,20) },
+    { id:"QAT", nombre:"QAT (Catar)",       fichas:range(1,20) },
+    { id:"SUI", nombre:"SUI (Suiza)",       fichas:range(1,20) },
+  ]},
+  { grupo:"Grupo C", equipos:[
+    { id:"BRA", nombre:"BRA (Brasil)",      fichas:range(1,20) },
+    { id:"MAR", nombre:"MAR (Marruecos)",   fichas:range(1,20) },
+    { id:"HAI", nombre:"HAI (Haití)",       fichas:range(1,20) },
+    { id:"SCO", nombre:"SCO (Escocia)",     fichas:range(1,20) },
+  ]},
+  { grupo:"Grupo D", equipos:[
+    { id:"USA", nombre:"USA (EE.UU.)",      fichas:range(1,20) },
+    { id:"PAR", nombre:"PAR (Paraguay)",    fichas:range(1,20) },
+    { id:"AUS", nombre:"AUS (Australia)",   fichas:range(1,20) },
+    { id:"TUR", nombre:"TUR (Turquía)",     fichas:range(1,20) },
+  ]},
+  { grupo:"Grupo E", equipos:[
+    { id:"GER", nombre:"GER (Alemania)",        fichas:range(1,20) },
+    { id:"CUW", nombre:"CUW (Curazao)",         fichas:range(1,20) },
+    { id:"CIV", nombre:"CIV (Costa de Marfil)", fichas:range(1,20) },
+    { id:"ECU", nombre:"ECU (Ecuador)",         fichas:range(1,20) },
+  ]},
+  { grupo:"Grupo F", equipos:[
+    { id:"NED", nombre:"NED (P. Bajos)", fichas:range(1,20) },
+    { id:"JPN", nombre:"JPN (Japón)",    fichas:range(1,20) },
+    { id:"SWE", nombre:"SWE (Suecia)",   fichas:range(1,20) },
+    { id:"TUN", nombre:"TUN (Túnez)",    fichas:range(1,20) },
+  ]},
+  { grupo:"Grupo G", equipos:[
+    { id:"BEL", nombre:"BEL (Bélgica)",       fichas:range(1,20) },
+    { id:"EGY", nombre:"EGY (Egipto)",        fichas:range(1,20) },
+    { id:"IRN", nombre:"IRN (IR Irán)",       fichas:range(1,20) },
+    { id:"NZL", nombre:"NZL (Nueva Zelanda)", fichas:range(1,20) },
+  ]},
+  { grupo:"Grupo H", equipos:[
+    { id:"ESP", nombre:"ESP (España)",      fichas:range(1,20) },
+    { id:"CPV", nombre:"CPV (Cabo Verde)",  fichas:range(1,20) },
+    { id:"KSA", nombre:"KSA (Arabia)",      fichas:range(1,20) },
+    { id:"URU", nombre:"URU (Uruguay)",     fichas:range(1,20) },
+  ]},
+  { grupo:"Grupo I", equipos:[
+    { id:"FRA", nombre:"FRA (Francia)",  fichas:range(1,20) },
+    { id:"SEN", nombre:"SEN (Senegal)",  fichas:range(1,20) },
+    { id:"IRQ", nombre:"IRQ (Irak)",     fichas:range(1,20) },
+    { id:"NOR", nombre:"NOR (Noruega)",  fichas:range(1,20) },
+  ]},
+  { grupo:"Grupo J", equipos:[
+    { id:"ARG", nombre:"ARG (Argentina)", fichas:range(1,20) },
+    { id:"ALG", nombre:"ALG (Argelia)",   fichas:range(1,20) },
+    { id:"AUT", nombre:"AUT (Austria)",   fichas:range(1,20) },
+    { id:"JOR", nombre:"JOR (Jordania)",  fichas:range(1,20) },
+  ]},
+  { grupo:"Grupo K", equipos:[
+    { id:"POR", nombre:"POR (Portugal)",    fichas:range(1,20) },
+    { id:"COD", nombre:"COD (Congo DR)",    fichas:range(1,20) },
+    { id:"UZB", nombre:"UZB (Uzbekistán)",  fichas:range(1,20) },
+    { id:"COL", nombre:"COL (Colombia)",    fichas:range(1,20) },
+  ]},
+  { grupo:"Grupo L", equipos:[
+    { id:"ENG", nombre:"ENG (Inglaterra)", fichas:range(1,20) },
+    { id:"CRO", nombre:"CRO (Croacia)",    fichas:range(1,20) },
+    { id:"GHA", nombre:"GHA (Ghana)",      fichas:range(1,20) },
+    { id:"PAN", nombre:"PAN (Panamá)",     fichas:range(1,20) },
+  ]},
+  { grupo:"Especial", equipos:[
+    { id:"CC", nombre:"CC (Coca-Cola)", fichas:range(1,14) },
+  ]},
+];
+
+function range(from, to){ return Array.from({length:to-from+1},(_,i)=>i+from); }
+
+// ── STATE ─────────────────────────────────────────────────
+let state       = {};   // { "MEX|5": "p", ... }
+let activeGroup = "Todos";
+let filterMode  = null; // null | "p" | "f"
+let searchQ     = "";
+let syncTimer   = null;
+let pendingSync = new Map(); // key → {action, estado}
+
+// ── INIT ──────────────────────────────────────────────────
+buildNav();
+renderContent();
+loadState();
+scheduleAutoSync();
+
+// ── NAV ───────────────────────────────────────────────────
+function buildNav() {
+  const ni = document.getElementById("nav-inner");
+  const groups = ["Todos", ...ALBUM.map(g=>g.grupo)];
+  groups.forEach(g => {
+    const btn = document.createElement("button");
+    btn.className = "nav-btn" + (g==="Todos"?" active":"");
+    btn.textContent = g==="Todos" ? "🌍 Todos" : g;
+    btn.onclick = () => setGroup(g);
+    ni.appendChild(btn);
+  });
+}
+
+function setGroup(g) {
+  activeGroup = g;
+  document.querySelectorAll(".nav-btn").forEach(b=>{
+    b.classList.toggle("active", b.textContent.replace("🌍 ","")===g || (g==="Todos"&&b.textContent==="🌍 Todos"));
+  });
+  renderContent();
+}
+
+// ── FILTER ────────────────────────────────────────────────
+function toggleFilter(mode) {
+  filterMode = (filterMode===mode) ? null : mode;
+  document.getElementById("btn-filter-p").classList.toggle("active", filterMode==="p");
+  document.getElementById("btn-filter-f").classList.toggle("active", filterMode==="f");
+  renderContent();
+}
+
+// ── SEARCH ───────────────────────────────────────────────
+function onSearch() {
+  searchQ = document.getElementById("search-input").value.trim().toLowerCase();
+  renderContent();
+}
+
+// ── RENDER ────────────────────────────────────────────────
+function renderContent() {
+  const content = document.getElementById("content");
+  const groups  = activeGroup==="Todos" ? ALBUM : ALBUM.filter(g=>g.grupo===activeGroup);
+
+  let totalP=0, totalAll=0;
+  ALBUM.forEach(g=>g.equipos.forEach(eq=>{
+    totalAll += eq.fichas.length;
+    totalP   += eq.fichas.filter(f=>state[makeKey(eq.id,f)]==="p").length;
+  }));
+  document.getElementById("cnt-p").textContent = totalP;
+  document.getElementById("cnt-f").textContent = totalAll-totalP;
+  const pct = totalAll ? Math.round(totalP/totalAll*100) : 0;
+  document.getElementById("prog-fill").style.width = pct+"%";
+  document.getElementById("prog-pct").textContent  = pct+"%";
+
+  // Build HTML
+  let html = "";
+  let anyVisible = false;
+
+  groups.forEach(g => {
+    let groupHtml = "";
+    g.equipos.forEach(eq => {
+      // Filter by search
+      const matchesSearch = !searchQ ||
+        eq.nombre.toLowerCase().includes(searchQ) ||
+        eq.id.toLowerCase().includes(searchQ) ||
+        eq.fichas.some(f=>String(f).includes(searchQ));
+      if (!matchesSearch) return;
+
+      // Filter stickers by mode
+      let fichasToShow = eq.fichas;
+      if (filterMode==="p") fichasToShow = eq.fichas.filter(f=>state[makeKey(eq.id,f)]==="p");
+      if (filterMode==="f") fichasToShow = eq.fichas.filter(f=>state[makeKey(eq.id,f)]!=="p");
+      if (filterMode && fichasToShow.length===0) return;
+
+      anyVisible = true;
+      const pegadas = eq.fichas.filter(f=>state[makeKey(eq.id,f)]==="p").length;
+      const total   = eq.fichas.length;
+      const pctTeam = total ? Math.round(pegadas/total*100) : 0;
+
+      let stickersHtml = "";
+      fichasToShow.forEach(f => {
+        const k      = makeKey(eq.id,f);
+        const isPeg  = state[k]==="p";
+        // Highlight search match on sticker number
+        const hiNum  = searchQ && String(f).includes(searchQ) && !eq.nombre.toLowerCase().includes(searchQ);
+        stickersHtml += `<div class="sticker${isPeg?" pegada":""}${hiNum?" s-hi":""}"
+          onclick="toggleSticker('${eq.id}',${f})">${f}</div>`;
+      });
+
+      groupHtml += `<div class="team-card" id="card-${eq.id}">
+        <div class="team-header">
+          <span class="team-name">${eq.nombre}</span>
+          <span class="team-prog-text">${pegadas}/${total}</span>
+        </div>
+        <div class="team-prog-track">
+          <div class="team-prog-fill" style="width:${pctTeam}%"></div>
+        </div>
+        <div class="stickers-grid">${stickersHtml}</div>
+      </div>`;
+    });
+
+    if (groupHtml) {
+      html += `<div class="group-section">
+        <div class="group-title">${g.grupo}</div>
+        ${groupHtml}
+      </div>`;
+    }
+  });
+
+  if (!anyVisible) {
+    html = `<div class="empty-state"><div class="icon">🔍</div><p>Sin resultados para "<b>${searchQ||"filtro actual"}</b>"</p></div>`;
+  }
+  content.innerHTML = html;
+}
+
+function makeKey(teamId, fichaNum) {
+  return teamId + "|" + fichaNum;
+}
+
+// ── TOGGLE STICKER ────────────────────────────────────────
+function toggleSticker(teamId, fichaNum) {
+  const k   = makeKey(teamId, fichaNum);
+  const was = state[k]==="p";
+
+  if (was) {
+    delete state[k];
+    queueAction(k, "deleteState", null);
+  } else {
+    state[k] = "p";
+    queueAction(k, "setState", "p");
+  }
+  renderContent();
+  flushPending();
+}
+
+// ── PENDING QUEUE ─────────────────────────────────────────
+function queueAction(key, action, estado) {
+  pendingSync.set(key, { action, estado });
+}
+
+async function flushPending() {
+  if (pendingSync.size===0) return;
+  const batch = new Map(pendingSync);
+  pendingSync.clear();
+
+  const promises = [];
+  batch.forEach(({action, estado}, key) => {
+    const body = action==="deleteState" ? { action, key } : { action, key, estado };
+    promises.push(apiCall(body));
+  });
+  await Promise.all(promises);
+}
+
+// ── LOAD STATE ────────────────────────────────────────────
+async function loadState() {
+  try {
+    const res = await apiCall({ action:"getAllState" });
+    if (res.ok) {
+      state = res.state || {};
+      renderContent();
+    }
+  } catch(e) {
+    showToast("Sin conexión – modo offline","err");
+  }
+}
+
+// ── SYNC ─────────────────────────────────────────────────
+async function syncNow() {
+  const btn = document.querySelector(".btn-sync");
+  btn.textContent = "⟳ …";
+  try {
+    await flushPending();
+    await loadState();
+    showToast("✓ Sincronizado","ok");
+  } catch(e) {
+    showToast("Error al sincronizar","err");
+  }
+  btn.textContent = "⟳ Sync";
+}
+
+function scheduleAutoSync() {
+  clearInterval(syncTimer);
+  syncTimer = setInterval(async ()=>{
+    await flushPending();
+    await loadState();
+  }, 20000);
+}
+
+// ── API ──────────────────────────────────────────────────
+async function apiCall(body) {
+  const res = await fetch(API_URL, {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify(body),
+    redirect:"follow"
+  });
+  return res.json();
+}
+
+// ── TOAST ─────────────────────────────────────────────────
+let toastTimer = null;
+function showToast(msg, type="") {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "show" + (type?" "+type:"");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ t.className=""; }, 2400);
+}
+</script>
+</body>
+</html>
