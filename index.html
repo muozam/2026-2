@@ -14,7 +14,7 @@
 
 body {
   font-family: 'DM Sans', sans-serif;
-  background: #f5f5f5;
+  background: #f0f2f5;
   color: #1a1a1a;
 }
 
@@ -83,6 +83,7 @@ body {
   border: none;
   border-radius: 20px;
   font-size: 14px;
+  outline: none;
 }
 
 .nav {
@@ -90,6 +91,7 @@ body {
   gap: 8px;
   overflow-x: auto;
   padding: 10px 0;
+  scrollbar-width: thin;
 }
 
 .nav-btn {
@@ -113,6 +115,7 @@ body {
   padding: 16px;
   max-width: 600px;
   margin: 0 auto;
+  padding-bottom: 80px;
 }
 
 .group {
@@ -132,7 +135,7 @@ body {
   border-radius: 12px;
   margin-bottom: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .team-header {
@@ -145,13 +148,16 @@ body {
 
 .team-name {
   font-weight: bold;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .team-progress {
   font-size: 12px;
   color: #16a34a;
   font-weight: bold;
+  background: #dcfce7;
+  padding: 2px 8px;
+  border-radius: 20px;
 }
 
 .team-bar {
@@ -180,16 +186,17 @@ body {
   align-items: center;
   justify-content: center;
   background: #fafafa;
-  border: 2px solid #ddd;
-  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
   cursor: pointer;
   font-size: 12px;
-  font-weight: bold;
+  font-weight: 600;
   transition: all 0.1s;
+  color: #475569;
 }
 
 .sticker:active {
-  transform: scale(0.95);
+  transform: scale(0.94);
 }
 
 .sticker.pegada {
@@ -203,7 +210,7 @@ body {
   content: "✓";
   position: absolute;
   top: 2px;
-  right: 4px;
+  right: 5px;
   font-size: 10px;
 }
 
@@ -237,6 +244,7 @@ body {
   font-size: 12px;
   font-weight: bold;
   margin-left: 10px;
+  color: #1a472a;
 }
 </style>
 </head>
@@ -268,8 +276,8 @@ body {
 <div class="toast" id="toast"></div>
 
 <script>
-// ✅ TU NUEVA URL DE APPS SCRIPT (actualizada)
-const API_URL = "https://script.google.com/macros/s/AKfycbxNlkoQV16dMKTQzodTVuZ1JSmbre45KdYi58-PSa1SdyWxCgw6yC4gSxla8Vj5-CG2Jw/exec";
+// ⚠️ ACTUALIZA ESTA URL CON LA NUEVA QUE OBTENGAS AL REIMPLEMENTAR ⚠️
+const API_URL = "https://script.google.com/macros/s/AKfycbxUu1OZ0jAod2wbX_QgG0VuT5l6FTbYIGYQkQCNlTNxdgagVTLG-1eqdUzi74kyeFDNxQ/exec";
 
 // ==================== DATOS DEL ÁLBUM ====================
 const ALBUM = {
@@ -367,9 +375,9 @@ function makeKey(teamId, num) {
 
 async function loadFromServer() {
   try {
-    showToast("Cargando...");
     const response = await fetch(API_URL, {
       method: "POST",
+      mode: "cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action: "getAllState" })
     });
@@ -385,12 +393,12 @@ async function loadFromServer() {
       render();
       showToast("✅ Sincronizado", "ok");
     } else {
-      throw new Error(data.error || "Error desconocido");
+      loadFromLocal();
     }
   } catch (error) {
     console.error("Error:", error);
     loadFromLocal();
-    showToast("⚠️ Usando datos locales", "error");
+    showToast("⚠️ Modo offline", "error");
   }
 }
 
@@ -401,17 +409,14 @@ async function saveToServer(key, isPegada) {
       ? { action, key, estado: "p" }
       : { action, key };
     
-    const response = await fetch(API_URL, {
+    await fetch(API_URL, {
       method: "POST",
+      mode: "cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     });
-    
-    const data = await response.json();
-    return data.success;
   } catch (error) {
     console.error("Error saving:", error);
-    return false;
   }
 }
 
@@ -423,8 +428,8 @@ function loadFromLocal() {
   const saved = localStorage.getItem("panini2026");
   if (saved) {
     pegadas = new Set(JSON.parse(saved));
-    render();
   }
+  render();
 }
 
 async function toggleSticker(teamId, num) {
@@ -432,20 +437,18 @@ async function toggleSticker(teamId, num) {
   
   if (pegadas.has(key)) {
     pegadas.delete(key);
-    await saveToServer(key, false);
     showToast("❌ Desmarcada");
   } else {
     pegadas.add(key);
-    await saveToServer(key, true);
     showToast("✅ Pegada!", "ok");
   }
   
   saveToLocal();
+  await saveToServer(key, pegadas.has(key));
   render();
 }
 
 function render() {
-  // Calcular totales
   let total = 0;
   let pegadasTotal = 0;
   
@@ -458,11 +461,12 @@ function render() {
     }
   }
   
+  const porcentaje = total > 0 ? Math.round((pegadasTotal / total) * 100) : 0;
+  
   document.getElementById("pegadasCount").textContent = pegadasTotal;
   document.getElementById("faltantesCount").textContent = total - pegadasTotal;
-  document.getElementById("progressFill").style.width = `${(pegadasTotal/total)*100}%`;
+  document.getElementById("progressFill").style.width = `${porcentaje}%`;
   
-  // Filtrar grupos
   let html = "";
   let grupos = activeGroup === "Todos" ? Object.keys(ALBUM) : [activeGroup];
   
@@ -470,14 +474,13 @@ function render() {
     let groupHtml = "";
     
     for (let equipo of ALBUM[grupo]) {
-      // Filtrar por búsqueda
       let matchesSearch = !searchText || 
         equipo.nombre.toLowerCase().includes(searchText) ||
-        equipo.id.toLowerCase().includes(searchText);
+        equipo.id.toLowerCase().includes(searchText) ||
+        equipo.fichas.some(n => n.toString().includes(searchText));
       
       if (!matchesSearch) continue;
       
-      // Filtrar stickers
       let fichasMostrar = [...equipo.fichas];
       if (filterMode === "pegadas") {
         fichasMostrar = fichasMostrar.filter(n => pegadas.has(makeKey(equipo.id, n)));
@@ -489,6 +492,7 @@ function render() {
       
       const pegadasEquipo = equipo.fichas.filter(n => pegadas.has(makeKey(equipo.id, n))).length;
       const totalEquipo = equipo.fichas.length;
+      const pctEquipo = totalEquipo > 0 ? Math.round((pegadasEquipo / totalEquipo) * 100) : 0;
       
       let stickersHtml = "";
       for (let num of fichasMostrar) {
@@ -506,7 +510,7 @@ function render() {
             <span class="team-progress">${pegadasEquipo}/${totalEquipo}</span>
           </div>
           <div class="team-bar">
-            <div class="team-bar-fill" style="width: ${(pegadasEquipo/totalEquipo)*100}%"></div>
+            <div class="team-bar-fill" style="width: ${pctEquipo}%"></div>
           </div>
           <div class="stickers">
             ${stickersHtml}
@@ -524,7 +528,10 @@ function render() {
   }
   
   if (!html) {
-    html = `<div style="text-align:center;padding:40px">😕 No hay resultados</div>`;
+    html = `<div style="text-align:center;padding:60px;color:#999">
+      <div style="font-size:48px;margin-bottom:16px">📭</div>
+      <div>No hay resultados</div>
+    </div>`;
   }
   
   document.getElementById("content").innerHTML = html;
@@ -536,10 +543,9 @@ function showToast(msg, type = "") {
   toast.className = "toast show" + (type ? " " + type : "");
   setTimeout(() => {
     toast.className = "toast";
-  }, 2000);
+  }, 1500);
 }
 
-// ==================== INICIALIZACIÓN ====================
 function buildNav() {
   const nav = document.getElementById("nav");
   const grupos = ["Todos", ...Object.keys(ALBUM)];
@@ -558,6 +564,7 @@ function buildNav() {
   });
 }
 
+// Event listeners
 document.getElementById("filterPegadas").onclick = () => {
   filterMode = filterMode === "pegadas" ? null : "pegadas";
   document.getElementById("filterPegadas").classList.toggle("active", filterMode === "pegadas");
@@ -586,10 +593,11 @@ buildNav();
 loadFromLocal();
 loadFromServer();
 
-// Auto-sync cada 30 segundos
 setInterval(() => {
   loadFromServer();
 }, 30000);
+
+console.log("✅ App iniciada");
 </script>
 </body>
 </html>
